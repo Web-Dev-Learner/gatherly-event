@@ -1,0 +1,100 @@
+{% extends "planner/base.html" %}
+{% load static %}
+
+{% block title %}Profile - Gatherly{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-br from-indigo-100 to-white min-h-screen flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-3xl bg-white rounded-2xl shadow-lg px-10 py-12">
+
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <div class="flex justify-center mb-4">
+        <div class="bg-indigo-600 p-3 rounded-full shadow-md">
+          <i data-lucide="user" class="text-white w-6 h-6"></i>
+        </div>
+      </div>
+      <h2 class="text-3xl font-extrabold text-gray-800">Manage Profile</h2>
+      <p class="text-sm text-gray-500 mt-1">Update your email, username, or password securely.</p>
+    </div>
+
+    <form method="POST" class="space-y-10">
+      {% csrf_token %}
+
+      <!-- Account Info -->
+      <fieldset class="border border-gray-200 rounded-xl p-6">
+        <legend class="text-lg font-semibold text-indigo-700 px-2">Account Info</legend>
+
+        <!-- Current Info -->
+        <div class="mt-4 grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Current Username</label>
+            <input type="text" value="{{ request.user.username }}" disabled class="mt-1 block w-full px-4 py-2 bg-gray-100 border rounded-md text-gray-600" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Current Email</label>
+            <input type="email" value="{{ request.user.email }}" disabled class="mt-1 block w-full px-4 py-2 bg-gray-100 border rounded-md text-gray-600" />
+          </div>
+        </div>
+
+        <!-- New Info -->
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+          {% for field in uform %}
+            <div>
+              <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                {{ field.label }}
+              </label>
+              {{ field }}
+              {% if field.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ field.errors.0 }}</p>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <!-- Optional Password -->
+      <fieldset class="border border-gray-200 rounded-xl p-6">
+        <legend class="text-lg font-semibold text-indigo-700 px-2">Change Password (Optional)</legend>
+        <div class="mt-4 grid md:grid-cols-2 gap-6">
+          {% for field in pform %}
+            <div>
+              <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                {{ field.label }}
+              </label>
+              {{ field }}
+              {% if field.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ field.errors.0 }}</p>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <p class="text-sm text-gray-500 mt-3">Leave blank if you don't want to change your password.</p>
+      </fieldset>
+
+      <!-- Save Button -->
+      <div class="flex justify-center">
+        <button type="submit"
+          class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-md shadow transition">
+         
+          Save Changes
+        </button>
+      </div>
+    </form>
+
+    <!-- Back to Dashboard Button -->
+    <div class="mt-10 text-center">
+      <a href="{% url 'home' %}" class="inline-flex items-center gap-2 text-white bg-gray-600 hover:bg-gray-700 font-medium px-4 py-2 rounded transition">
+        Back to Home
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    lucide.createIcons();
+  });
+</script>
+{% endblock %}

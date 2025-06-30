@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Gatherly{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .active-link {
+      background-color: rgb(59 130 246);
+      color: white !important;
+    }
+
+    .sidebar-collapsed .label {
+      display: none;
+    }
+
+    .sidebar-collapsed {
+      width: 4rem;
+    }
+
+    .sidebar-expanded {
+      width: 15rem;
+    }
+
+    .content-shift {
+      margin-left: 15rem;
+    }
+
+    .content-collapsed {
+      margin-left: 4rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col md:flex-row">
+
+  <!-- Mobile Topbar -->
+  <header class="md:hidden flex justify-between items-center p-4 bg-gray-900 text-white fixed w-full top-0 z-50">
+    <div class="text-lg font-bold flex items-center gap-2">
+      <i data-lucide="layers" class="w-5 h-5"></i>
+      <span>Gatherly</span>
+    </div>
+    <button onclick="toggleMobileSidebar()" class="text-white hover:text-gray-300 text-xl">
+      ☰
+    </button>
+  </header>
+
+  <!-- Sidebar -->
+  <aside id="sidebar"
+    class="bg-gray-900 text-white w-60 md:w-auto fixed md:relative top-0 left-0 z-40 transition-all duration-300 transform -translate-x-full md:translate-x-0 md:sidebar-expanded 
+           overflow-y-auto h-screen pt-16 md:pt-0">
+
+    <div class="hidden md:flex justify-between items-center mb-6 mt-4 px-4">
+      <div class="flex items-center gap-2 text-xl font-bold">
+        <i data-lucide="layers" class="w-6 h-6"></i>
+        <span class="label">Gatherly</span>
+      </div>
+      <button onclick="toggleDesktopSidebar()" class="text-white hover:text-gray-400 text-lg hidden md:inline-block">
+        ☰
+      </button>
+    </div>
+
+    <nav class="space-y-2 text-sm font-medium px-4">
+      <a href="{% url 'home' %}" class="nav-link flex items-center gap-3 py-2 px-2 rounded hover:bg-blue-700">
+        <i data-lucide="home" class="w-5 h-5"></i><span class="label">Home</span>
+      </a>
+      <a href="{% url 'create_event' %}" class="nav-link flex items-center gap-3 py-2 px-2 rounded hover:bg-blue-700">
+        <i data-lucide="plus-circle" class="w-5 h-5"></i><span class="label">Create Event</span>
+      </a>
+      <a href="{% url 'my_events' %}" class="nav-link flex items-center gap-3 py-2 px-2 rounded hover:bg-blue-700">
+        <i data-lucide="list" class="w-5 h-5"></i><span class="label">My Events</span>
+      </a>
+      <a href="{% url 'calendar' %}" class="nav-link flex items-center gap-3 py-2 px-2 rounded hover:bg-blue-700">
+        <i data-lucide="calendar" class="w-5 h-5"></i><span class="label">Calendar</span>
+      </a>
+      <a href="{% url 'profile' %}" class="nav-link flex items-center gap-3 py-2 px-2 rounded hover:bg-blue-700">
+        <i data-lucide="user" class="w-5 h-5"></i><span class="label">Profile</span>
+      </a>
+      <div class="border-t border-gray-700 my-3 pt-3">
+        <a href="{% url 'logout' %}" class="nav-link flex items-center gap-3 py-2 px-2 rounded hover:bg-blue-700">
+          <i data-lucide="log-out" class="w-5 h-5"></i><span class="label">Logout</span>
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main id="main-content"
+    class="flex-1 overflow-y-auto h-[calc(100vh-4rem)] md:h-screen transition-all duration-300 mt-16 md:mt-0 md:content-shift p-6">
+    {% block content %}
+    <!-- Your dynamic page content -->
+    {% endblock %}
+  </main>
+
+  <!-- Scripts -->
+   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+  <script>
+    let collapsed = false;
+
+    function toggleDesktopSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const content = document.getElementById('main-content');
+      collapsed = !collapsed;
+      sidebar.classList.toggle('sidebar-collapsed');
+      sidebar.classList.toggle('sidebar-expanded');
+      content.classList.toggle('content-collapsed');
+      content.classList.toggle('content-shift');
+    }
+
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('-translate-x-full');
+    }
+
+    window.onload = () => {
+      lucide.createIcons();
+      const path = window.location.pathname;
+      document.querySelectorAll('.nav-link').forEach(link => {
+        if (link.getAttribute('href') === path) {
+          link.classList.add('active-link');
+        }
+      });
+    };
+  </script>
+</body>
+</html>

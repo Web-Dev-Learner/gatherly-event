@@ -1,0 +1,94 @@
+{% extends 'planner/base.html' %}
+
+{% block title %}Edit Event - Gatherly{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg mt-10">
+  <div class="flex items-center justify-center mb-6 text-blue-700">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-5.586-9.414a2 2 0 112.828 2.828L11 14l-4 1 1-4 6.586-6.586z" />
+    </svg>
+    <h2 class="text-3xl font-bold">Edit Event</h2>
+  </div>
+
+  {% if success %}
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 text-center flex items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L9 14.414l-3.707-3.707a1 1 0 00-1.414 1.414l4.414 4.414a1 1 0 001.414 0l8.414-8.414a1 1 0 00-1.414-1.414z" clip-rule="evenodd" />
+      </svg>
+      <span>Event updated successfully!</span>
+      <a href="{% url 'my_events' %}" class="ml-2 text-blue-600 underline">← Back to My Events</a>
+    </div>
+  {% endif %}
+
+  {% if no_change %}
+    <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded mb-4 text-center">
+      ⚠️ No changes were made. Please update any field before saving.
+    </div>
+  {% endif %}
+
+  <form method="POST" class="space-y-5">
+    {% csrf_token %}
+
+    <!-- Title -->
+    <div>
+      <label for="id_title" class="block text-sm font-medium text-gray-700">Title</label>
+      <input type="text" name="title" id="id_title" value="{{ form.title.value|default:event.title }}"
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label for="id_description" class="block text-sm font-medium text-gray-700">Description</label>
+      <textarea name="description" id="id_description" rows="4"
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        required>{{ form.description.value|default:event.description }}</textarea>
+    </div>
+
+    <!-- Date -->
+    <div>
+      <label for="id_date" class="block text-sm font-medium text-gray-700">Date</label>
+      <input type="date" name="date" id="id_date"
+        value="{{ form.date.value|default:event.date|date:'Y-m-d' }}"
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+    </div>
+
+    <!-- Time -->
+    <div>
+      <label for="id_time" class="block text-sm font-medium text-gray-700">Time</label>
+      <input type="time" name="time" id="id_time"
+        value="{{ form.time.value|default:event.time|time:'H:i' }}"
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+    </div>
+
+    <!-- Location -->
+    <div>
+      <label for="id_location" class="block text-sm font-medium text-gray-700">Location</label>
+      <input type="text" name="location" id="id_location" value="{{ form.location.value|default:event.location }}"
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+    </div>
+
+    <!-- Guests -->
+    <div>
+      <label for="id_guest_emails" class="block text-sm font-medium text-gray-700">Guest emails</label>
+      <input type="text" name="guest_emails" id="id_guest_emails"
+        value="{{ form.guest_emails.value|default:event.guest_emails }}"
+        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Comma-separated emails" required>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-between pt-6">
+      <button type="submit"
+        class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-md shadow transition">
+        Save Changes
+      </button>
+
+      <a href="{% url 'my_events' %}"
+        class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-5 py-2 rounded-md shadow transition">
+        Cancel / Back
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}

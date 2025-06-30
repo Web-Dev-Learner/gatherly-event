@@ -1,0 +1,16 @@
+{% extends "planner/base.html" %}
+
+{% block title %}RSVP Submitted - Gatherly{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto mt-10 bg-white p-8 rounded-2xl shadow-lg text-center">
+  <h2 class="text-2xl font-bold text-green-600 mb-4">🎉 Thank You!</h2>
+  <p class="text-gray-700">Your RSVP has been successfully submitted for this event.</p>
+
+  <div class="mt-6">
+    <a href="{% url 'home' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md transition">
+      Back to Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}

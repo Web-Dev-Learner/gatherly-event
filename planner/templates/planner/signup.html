@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up - Gatherly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <h2 class="text-3xl font-bold text-center text-blue-700 mb-6">Sign Up</h2>
+
+    <form method="POST" novalidate class="space-y-5" id="signupForm">
+      {% csrf_token %}
+
+      <!-- Username -->
+      <div>
+        <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" name="username" id="id_username" maxlength="20"
+               class="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+               required>
+        <p class="text-red-500 text-sm mt-1 hidden" id="username-error">Max 20 characters only.</p>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="id_email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" name="email" id="id_email" maxlength="100"
+               class="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+               required>
+        <p class="text-red-500 text-sm mt-1 hidden" id="email-error">Enter a valid email address.</p>
+      </div>
+
+      <!-- Password -->
+      <div class="relative">
+        <label for="id_password1" class="block text-sm font-medium text-gray-700">Password</label>
+        <input type="password" name="password1" id="id_password1" minlength="8" maxlength="30"
+               class="mt-1 block w-full rounded-lg border border-gray-300 p-2 pr-10 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+               required>
+        <button type="button" onclick="togglePassword('id_password1', this)" class="absolute right-3 top-9 text-gray-500">
+          <span id="eye-icon-id_password1" class="material-symbols-outlined">visibility</span>
+        </button>
+        <p class="text-red-500 text-sm mt-1 hidden" id="password1-error">Password must be 8–30 characters.</p>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="relative">
+        <label for="id_password2" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+        <input type="password" name="password2" id="id_password2" minlength="8" maxlength="30"
+               class="mt-1 block w-full rounded-lg border border-gray-300 p-2 pr-10 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+               required>
+        <button type="button" onclick="togglePassword('id_password2', this)" class="absolute right-3 top-9 text-gray-500">
+          <span id="eye-icon-id_password2" class="material-symbols-outlined">visibility</span>
+        </button>
+        <p class="text-red-500 text-sm mt-1 hidden" id="password2-error">Passwords do not match.</p>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl transition duration-200 shadow-md">
+        Create Account
+      </button>
+    </form>
+
+    <p class="mt-4 text-center text-sm text-gray-600">
+      Already have an account? <a href="{% url 'login' %}" class="text-blue-600 hover:underline">Login here</a>
+    </p>
+  </div>
+
+  <!-- Material Symbols (Eye Icon Font) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <!-- JS: Toggle + Validation -->
+  <script>
+    function togglePassword(inputId, button) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(`eye-icon-${inputId}`);
+      const isVisible = input.type === "text";
+
+      input.type = isVisible ? "password" : "text";
+      icon.textContent = isVisible ? "visibility" : "visibility_off";
+    }
+
+    document.getElementById('signupForm').addEventListener('input', function () {
+      const username = document.getElementById('id_username');
+      document.getElementById('username-error').classList.toggle('hidden', username.value.length <= 20 && username.value.trim().length > 0);
+
+      const email = document.getElementById('id_email');
+      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
+      document.getElementById('email-error').classList.toggle('hidden', emailValid && email.value.length <= 100);
+
+      const password1 = document.getElementById('id_password1');
+      document.getElementById('password1-error').classList.toggle('hidden', password1.value.length >= 8 && password1.value.length <= 30);
+
+      const password2 = document.getElementById('id_password2');
+      const match = password1.value === password2.value && password2.value.length >= 8;
+      document.getElementById('password2-error').classList.toggle('hidden', match);
+    });
+  </script>
+</body>
+</html>

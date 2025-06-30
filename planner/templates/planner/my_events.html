@@ -1,0 +1,152 @@
+{% extends "planner/base.html" %}
+{% load static %}
+{% block title %}My Events - Gatherly{% endblock %}
+
+{% block content %}
+<div class="flex justify-center px-4 py-6">
+  <div class="w-full max-w-6xl bg-white rounded-lg shadow-lg px-6 py-8 animate-fade-in">
+
+    <!-- Header + Controls -->
+    <div class="flex flex-col sm:flex-row items-center justify-between mb-6">
+      <h2 class="text-3xl font-bold text-gray-800">My Events</h2>
+      <div class="flex flex-col sm:flex-row items-center gap-4 mt-4 sm:mt-0">
+        <input id="searchInput" type="text" placeholder="Search events..." class="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 w-full sm:w-auto transition" />
+        <select id="sortSelect" class="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 transition">
+          <option value="date_asc">Date ↑</option>
+          <option value="date_desc">Date ↓</option>
+          <option value="created_asc">Created ↑</option>
+          <option value="created_desc">Created ↓</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Grid Containers -->
+    <div id="upcomingGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      {% for event in upcoming_events %}
+      <div class="event-card p-4 border rounded-md bg-gray-50 hover:shadow-lg transition-all duration-300"
+           data-created="{{ event.created_at|date:'c' }}" data-date="{{ event.date|date:'c' }}" data-type="upcoming">
+        <p class="font-semibold"><i class="lucide-calendar-days inline w-4 h-4 mr-1 text-blue-600"></i> Title: {{ event.title }}</p>
+        <p class="text-sm mt-2"><i class="lucide-clock inline w-4 h-4 mr-1 text-gray-600"></i> Time: {{ event.time }}</p>
+        <p class="text-sm"><i class="lucide-map-pin inline w-4 h-4 mr-1 text-gray-600"></i> Location: {{ event.location }}</p>
+        <p class="text-sm"><i class="lucide-users inline w-4 h-4 mr-1 text-gray-600"></i> Guests: {{ event.guest_emails }}</p>
+        <p class="text-sm"><i class="lucide-calendar inline w-4 h-4 mr-1 text-gray-600"></i> Date: {{ event.date }}</p>
+
+        {% if event.video_link %}
+        <a href="{{ event.video_link }}" target="_blank"
+           class="mt-3 inline-flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+          <i class="lucide-video w-4 h-4"></i> Video
+        </a>
+        {% endif %}
+
+        <div class="mt-3 flex flex-wrap gap-2">
+          <a href="{% url 'rsvp' event.id %}" class="text-blue-700 border border-blue-700 px-3 py-1 rounded hover:bg-blue-700 hover:text-white transition">
+            <i class="lucide-eye w-4 h-4 inline"></i> RSVP
+          </a>
+          <a href="{% url 'edit_event' event.id %}" class="text-yellow-600 border border-yellow-600 px-3 py-1 rounded hover:bg-yellow-600 hover:text-white transition">
+            <i class="lucide-pencil w-4 h-4 inline"></i> Edit
+          </a>
+          <a href="{% url 'delete_event' event.id %}" class="text-red-600 border border-red-600 px-3 py-1 rounded hover:bg-red-600 hover:text-white transition">
+            <i class="lucide-trash w-4 h-4 inline"></i> Delete
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div id="pastGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for event in past_events %}
+      <div class="event-card p-4 border rounded-md bg-gray-200 hover:shadow-lg transition-all duration-300"
+           data-created="{{ event.created_at|date:'c' }}" data-date="{{ event.date|date:'c' }}" data-type="past">
+        <p class="font-semibold"><i class="lucide-history inline w-4 h-4 mr-1 text-gray-600"></i> Title: {{ event.title }}</p>
+        <p class="text-sm mt-2"><i class="lucide-clock inline w-4 h-4 mr-1 text-gray-600"></i> Time: {{ event.time }}</p>
+        <p class="text-sm"><i class="lucide-map-pin inline w-4 h-4 mr-1 text-gray-600"></i> Location: {{ event.location }}</p>
+        <p class="text-sm"><i class="lucide-users inline w-4 h-4 mr-1 text-gray-600"></i> Guests: {{ event.guest_emails }}</p>
+        <p class="text-sm"><i class="lucide-calendar inline w-4 h-4 mr-1 text-gray-600"></i> Date: {{ event.date }}</p>
+
+        {% if event.video_link %}
+        <a href="{{ event.video_link }}" target="_blank"
+           class="mt-3 inline-flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+          <i class="lucide-video w-4 h-4"></i> Video
+        </a>
+        {% endif %}
+
+        <div class="mt-3 flex flex-wrap gap-2">
+          <a href="{% url 'rsvp' event.id %}" class="text-blue-700 border border-blue-700 px-3 py-1 rounded hover:bg-blue-700 hover:text-white transition">
+            <i class="lucide-eye w-4 h-4 inline"></i> View
+          </a>
+          <a href="{% url 'edit_event' event.id %}" class="text-yellow-600 border border-yellow-600 px-3 py-1 rounded hover:bg-yellow-600 hover:text-white transition">
+            <i class="lucide-pencil w-4 h-4 inline"></i> Edit
+          </a>
+          <a href="{% url 'delete_event' event.id %}" class="text-red-600 border border-red-600 px-3 py-1 rounded hover:bg-red-600 hover:text-white transition">
+            <i class="lucide-trash w-4 h-4 inline"></i> Delete
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if not upcoming_events and not past_events %}
+    <p class="text-center text-gray-500 text-sm mt-10">You haven't created any events yet.</p>
+    {% endif %}
+
+    <div class="mt-10 text-center">
+      <a href="{% url 'home' %}" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded transition">
+        Back to Home
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+
+  const searchInput = document.getElementById('searchInput');
+  const sortSelect = document.getElementById('sortSelect');
+  const allCards = Array.from(document.querySelectorAll('.event-card'));
+
+  function applyFilterSort() {
+    const term = searchInput.value.toLowerCase();
+    const [field, order] = sortSelect.value.split('_');
+
+    const filtered = allCards.filter(card =>
+      card.innerText.toLowerCase().includes(term)
+    );
+
+    filtered.sort((a, b) => {
+      const aVal = new Date(a.dataset[field]);
+      const bVal = new Date(b.dataset[field]);
+      return order === 'asc' ? aVal - bVal : bVal - aVal;
+    });
+
+    const upcomingGrid = document.getElementById('upcomingGrid');
+    const pastGrid = document.getElementById('pastGrid');
+    upcomingGrid.innerHTML = '';
+    pastGrid.innerHTML = '';
+
+    filtered.forEach(card => {
+      card.classList.remove('bg-red-100', 'bg-gray-200', 'bg-gray-50');
+
+      if (card.dataset.type === 'past') {
+        card.classList.add('bg-red-100');
+        pastGrid.appendChild(card);
+      } else {
+        card.classList.add('bg-gray-50');
+        upcomingGrid.appendChild(card);
+      }
+    });
+  }
+
+  searchInput.addEventListener('input', applyFilterSort);
+  sortSelect.addEventListener('change', applyFilterSort);
+});
+</script>
+
+<style>
+.animate-fade-in { animation: fadeIn 0.4s ease-in-out; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+{% endblock %}
