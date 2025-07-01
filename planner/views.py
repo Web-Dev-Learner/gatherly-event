@@ -31,7 +31,7 @@ from .mailgun_email import send_mailgun_email
 def home(request):
     now = timezone.now().date()
 
-    # ✅ Only include non-deleted events
+    
     events = Event.objects.filter(owner=request.user, is_deleted=False)
 
     upcoming = events.filter(date__gt=now)
@@ -136,8 +136,7 @@ Gatherly Team
 """
                     send_mailgun_email(email, subject, message)
 
-            # ✅ Show toast + clear form
-            messages.success(request, "Event created successfully.")
+           
             form = EventForm()  # Clear the form
     else:
         form = EventForm()
@@ -226,7 +225,7 @@ def calendar_view(request):
                     'title': e.title,
                     'start': full_datetime,
                     'url': reverse('my_events') + f"#event-{e.id}",
-                    'colorClass': color_class  # ✅ Used in eventContent
+                    'colorClass': color_class  
                 })
 
             except Exception as ex:
@@ -234,7 +233,7 @@ def calendar_view(request):
 
         return JsonResponse(data, safe=False)
 
-    # For normal HTML page request
+    
     return render(request, 'planner/calendar.html')
 
 
@@ -295,12 +294,12 @@ def rsvp_view(request, event_id):
 def edit_event_view(request, event_id):
     event = get_object_or_404(Event, id=event_id, owner=request.user)
     success = False
-    no_change = False  # flag to show "no change" message
+    no_change = False 
 
     if request.method == 'POST':
         form = EventForm(request.POST, instance=event)
         if form.is_valid():
-            if form.has_changed():  # ✅ check if any field changed
+            if form.has_changed(): 
                 updated_event = form.save(commit=False)
 
                 if not updated_event.video_link or updated_event.video_link.strip() == "":

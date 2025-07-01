@@ -12,45 +12,10 @@ class Event(models.Model):
     time = models.TimeField()
     location = models.CharField(max_length=300)
     guest_emails = models.TextField(help_text="Comma-separated emails")
-    created_at = models.DateTimeField(auto_now_add=True)
-    video_link = models.URLField(blank=True, null=True)
-
-    # updated_at = models.DateTimeField(auto_now=True) 
-
-     # NEW fields
-    reminder_sent = models.BooleanField(default=False)
-    is_deleted = models.BooleanField(default=False)
-    
-    # event_last_updated = models.DateTimeField()
-
-    def start_datetime(self):
-        return timezone.make_aware(datetime.combine(self.date, self.time))
-
-  
-
-    def __str__(self):
-        return f"{self.title} on {self.date}"
-
-
-# planner/models.py
-
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
-from datetime import datetime
-
-class Event(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    date = models.DateField()
-    time = models.TimeField()
-    location = models.CharField(max_length=300)
-    guest_emails = models.TextField(help_text="Comma-separated emails")
     video_link = models.URLField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)  # ✅ Last updated timestamp
+    updated_at = models.DateTimeField(auto_now=True)  
     reminder_sent = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
 
@@ -59,10 +24,6 @@ class Event(models.Model):
 
     def __str__(self):
         return f"{self.title} on {self.date}"
-
-
-
-
 
 
 class RSVP(models.Model):
@@ -79,5 +40,3 @@ class RSVP(models.Model):
 
     class Meta:
         unique_together = ('user', 'event')
-
-

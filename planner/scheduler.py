@@ -5,7 +5,7 @@ from .mailgun_email import send_mailgun_email
 from datetime import datetime, timedelta
 import pytz
 
-# 🔒 Global variable to avoid duplicate scheduler
+#  Global variable to avoid duplicate scheduler
 scheduler = None
 
 def send_reminder_emails():
