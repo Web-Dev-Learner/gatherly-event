@@ -7,7 +7,7 @@
 
 ##  Live Preview
 
-👉 **Try the app live**: [Gatherly Live Demo](https://your-live-link.com)  
+👉 **Try the app live**: [Gatherly Live Demo](https://drive.google.com/file/d/1pidF9BPXoze2BHWDoyiQDFK2SjuUoKE9/view?usp=sharing)  
 
 
 
