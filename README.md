@@ -27,7 +27,7 @@
 ##  Tech Stack
 
 - **Frontend**: HTML5, Tailwind CSS (via templates)
-- **Backend**: Django 5.2.3
+- **Backend**: Django 
 - **Database**: SQLite3 (Django default)
 - **Email**: Mailgun API integration
 - **Calendar**: Custom event color-coded calendar (dot indicators)
