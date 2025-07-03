@@ -26,19 +26,17 @@
         <input type="email" name="email" id="email" maxlength="100" autofocus
                class="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
                required>
-        <p class="text-red-500 text-sm mt-1 hidden" id="email-error">Enter a valid email (max 100 characters).</p>
       </div>
 
       <!-- Password -->
       <div class="relative">
         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <input type="password" name="password" id="password" minlength="8" maxlength="30"
+        <input type="password" name="password" id="password"
                class="mt-1 block w-full rounded-lg border border-gray-300 p-2 pr-10 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
                required>
         <button type="button" onclick="togglePassword('password', this)" class="absolute right-3 top-9 text-gray-500">
           <span id="eye-icon-password" class="material-symbols-outlined">visibility</span>
         </button>
-        <p class="text-red-500 text-sm mt-1 hidden" id="password-error">Password must be 8–30 characters.</p>
       </div>
 
       <!-- Submit -->
@@ -56,7 +54,7 @@
   <!-- Eye icon font -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-  <!-- Script: Eye toggle & constraints -->
+  <!-- Script: Eye toggle -->
   <script>
     function togglePassword(inputId, btn) {
       const input = document.getElementById(inputId);
@@ -66,16 +64,6 @@
       input.type = isVisible ? "password" : "text";
       icon.textContent = isVisible ? "visibility" : "visibility_off";
     }
-
-    document.getElementById('loginForm').addEventListener('input', function () {
-      const email = document.getElementById('email');
-      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) && email.value.length <= 100;
-      document.getElementById('email-error').classList.toggle('hidden', emailValid);
-
-      const password = document.getElementById('password');
-      const passValid = password.value.length >= 8 && password.value.length <= 30;
-      document.getElementById('password-error').classList.toggle('hidden', passValid);
-    });
   </script>
 </body>
 </html>
